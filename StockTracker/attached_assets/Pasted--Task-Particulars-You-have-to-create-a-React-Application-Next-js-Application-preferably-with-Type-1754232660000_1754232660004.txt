@@ -1,0 +1,160 @@
+ Task Particulars:
+You have to create a React Application / Next.js Application preferably with TypeScript to fulfil the requirement stated in the subsequent section. The codebase should contain a readme file with specific instructions to run the application. In case you are using any additional APIs or items requiring credentials – you should share the process of obtaining such KEYS in the readme content itself. Do not commit any API Keys or credentials.
+
+📝 Task Description:
+Design and implement a dashboard interface using React / Next.js + TypeScript that visualizes dynamic data over a map and a timeline, with support for polygon creation and color-coded data display based on selected datasets. There are bonus features that you may attempt for an edge on your application.
+
+⚙️ Tech Stack Requirements:
+✅ Required:
+React / Next.js
+
+TypeScript
+
+State management of your choice (e.g., Context API, Zustand, Redux)
+
+Mapping library (any of: Leaflet, Mapbox GL JS, MapLibre, Google Maps JS)
+
+Usage of Ant Design / Shadcn preferred
+
+✅ Optional/Liked:
+Any charting or slider library (e.g., Recharts, react-range)
+
+🧩 Step-by-Step Functional Requirements
+🟦 STEP 1: Setup Timeline Slider
+Goal:
+Allow users to view and interact with hourly data across a 30-day window (15 days before and after today).
+
+Implement a horizontal timeline slider at the top of the dashboard.
+
+Slider Core Functionalities:
+Single draggable handle – user selects a specific hour range by moving the slider across the timeline
+
+Dual-ended range slider – user selects a time window by dragging the ends of the slider on both sides to increase the total range of time
+
+Slider Requirements:
+Allow hourly resolution
+
+Visually show selected time(s)
+
+Be adjustable using drag or click
+
+🟩 STEP 2: Display an Interactive Map
+Goal:
+Embed a map that users can interact with to define spatial regions.
+
+Use any mapping library (Leaflet, Mapbox GL, etc.)
+
+Map Features:
+Move and center reset
+
+Zoom is not required, hence lock at a resolution of 2 sq. km
+
+Maintain polygon visibility when the user moves the map
+
+✅ Bonus:
+Zoom functionality is a bonus feature – but makes polygon persistence complicated.
+
+🟥 STEP 3: Polygon Drawing Tools
+Goal:
+Let the user define polygonal regions on the map to analyze using a button to start drawing for the polygon.
+
+Drawing Rules:
+User can draw polygons with:
+
+Minimum: 3 points
+
+Maximum: 12 points
+
+After Drawing:
+Prompt the user to select a data source to tag the polygon (if more than one data source, else select automatically)
+
+Persist polygons on the map after creation so that they move if the map moves
+
+Allow users to:
+
+View all drawn polygons
+
+Delete any polygon
+
+✅ Bonus:
+Enable polygon editing (moving vertices, reshaping)
+
+🟨 STEP 4: Data Source Selection in Sidebar
+Goal:
+Provide a sidebar to control data sources and thresholds.
+
+Sidebar Features:
+Allow selection of one data source per polygon
+
+Start with 1 mandatory data source (Open-Meteo; see below)
+
+Allow the user to determine the colour coding for each data source available
+
+You can take reference to the design on Data Filtering available on Excel / Google Sheets
+
+Sidebar fields for each selected data source:
+Field: Numerical value selector (e.g., temperature_2m)
+
+Threshold-based coloring rules (user-defined):
+
+Operator: <, >, <=, >=
+
+Example Rules:
+
+mathematica
+Copy
+Edit
+< 10         → Red
+≥ 10 and < 25 → Blue
+≥ 25         → Green
+🟪 STEP 5: Color Polygons Based on Data Source Values
+Goal:
+Use fetched data to color each polygon based on rules.
+
+When a polygon is created:
+Extract bounding box (or polygon centroid)
+
+Fetch data for the current hour (or time range)
+
+Apply the color rule from the sidebar for that polygon’s data source
+
+When the timeline slider has more than 1 hour in range, it should average the values for the polygon for each hour (if the data provided is hourly)
+
+Polygons must update color automatically as the timeline changes
+
+🔗 STEP 6: Connect to Open-Meteo API (Required)
+API Endpoint Example:
+makefile
+Copy
+Edit
+https://archive-api.open-meteo.com/v1/archive?
+latitude=52.52&
+longitude=13.41&
+start_date=2025-07-18&
+end_date=2025-08-01&
+hourly=temperature_2m
+Minimum usage:
+Use latitude and longitude to query time-series data
+
+Use the temperature_2m field
+
+Display temperature based on the user-selected hour(s) from timeline
+
+Handle multiple lat/lon values if needed
+
+You can simulate data for polygon bounding boxes or centroid
+
+✅ Bonus:
+You can add more data source, either from the same provided API or some other API. This would require you to create more data mapping variables
+
+🔄 STEP 7: Dynamic Updates on Timeline Change
+Goal:
+When users adjust the timeline slider:
+
+All polygons should:
+
+Fetch the updated value for the new time window
+
+Re-apply color rules
+
+Visually update on the map
